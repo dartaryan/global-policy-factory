@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Policy Factory — PassportCard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@0.263.1"></script>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        pc: { red: '#E30613', darkred: '#B8050F', light: '#FFF1F1', bg: '#FAFAFA', dark: '#1A1A2E', mid: '#2D2D44', slate: '#64748B' }
+      }
+    }
+  }
+}
+</script>
+</head>
+<body>
+
+<!-- App Shell -->
+<div class="app-shell">
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">P</div>
+      <div class="sidebar-logo-text">
+        <div class="sidebar-logo-title">Policy Factory</div>
+        <div class="sidebar-logo-sub">PassportCard Group</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">סקירה כללית</div>
+      <button class="sidebar-item active" data-view="dashboard" onclick="showView('dashboard')">
+        <i data-lucide="layout-dashboard"></i><span>לוח בקרה</span>
+      </button>
+
+      <div class="sidebar-section">עדיפות 1 — ליבה</div>
+      <button class="sidebar-item" data-view="product-shelf" onclick="showView('product-shelf')">
+        <i data-lucide="library"></i><span>מדף מוצרים</span>
+      </button>
+      <button class="sidebar-item" data-view="rule-engine" onclick="showView('rule-engine')">
+        <i data-lucide="workflow"></i><span>מנוע חוקים</span>
+      </button>
+      <button class="sidebar-item" data-view="versioning" onclick="showView('versioning')">
+        <i data-lucide="git-branch"></i><span>ניהול גרסאות</span>
+      </button>
+      <button class="sidebar-item" data-view="price-calc" onclick="showView('price-calc')">
+        <i data-lucide="calculator"></i><span>מחשבון תמחור</span>
+      </button>
+      <button class="sidebar-item" data-view="currency" onclick="showView('currency')">
+        <i data-lucide="banknote"></i><span>ניהול מטבעות</span>
+      </button>
+
+      <div class="sidebar-section">עדיפות 1-2</div>
+      <button class="sidebar-item" data-view="gatekeeper" onclick="showView('gatekeeper')">
+        <i data-lucide="shield-check"></i><span>שומר סף והעברות</span>
+      </button>
+      <button class="sidebar-item" data-view="reinsurance" onclick="showView('reinsurance')">
+        <i data-lucide="repeat"></i><span>ביטוח משנה</span>
+      </button>
+
+      <div class="sidebar-section">עדיפות 2</div>
+      <button class="sidebar-item" data-view="guardrails" onclick="showView('guardrails')">
+        <i data-lucide="shield-alert"></i><span>מעקות בטיחות</span>
+      </button>
+      <button class="sidebar-item" data-view="audit" onclick="showView('audit')">
+        <i data-lucide="file-search"></i><span>ביקורת ובקרה</span>
+      </button>
+
+      <div class="sidebar-section">עדיפות 3 — מתקדם</div>
+      <button class="sidebar-item" data-view="wizard" onclick="showView('wizard')">
+        <i data-lucide="wand-2"></i><span>אשף הגדרה</span>
+      </button>
+      <button class="sidebar-item" data-view="border-control" onclick="showView('border-control')">
+        <i data-lucide="globe"></i><span>בקרת גבולות</span>
+      </button>
+      <button class="sidebar-item" data-view="life-events" onclick="showView('life-events')">
+        <i data-lucide="heart-pulse"></i><span>מגיב אירועי חיים</span>
+      </button>
+      <button class="sidebar-item" data-view="corporate" onclick="showView('corporate')">
+        <i data-lucide="building-2"></i><span>מבנה ארגוני</span>
+      </button>
+      <button class="sidebar-item" data-view="finance" onclick="showView('finance')">
+        <i data-lucide="coins"></i><span>פיננסים מתקדם</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">AK</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name">אלון כצף</div>
+        <div class="sidebar-user-role">נשיא</div>
+      </div>
+      <div class="sidebar-settings">
+        <i data-lucide="settings" class="w-4 h-4"></i>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Top Header -->
+    <header class="top-header">
+      <div class="header-right">
+        <button class="hamburger-btn" onclick="toggleSidebar()">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <div id="breadcrumb" class="breadcrumb">
+          <a href="#" onclick="showView('dashboard')">מפעל</a>
+          <span class="separator">/</span>
+          <span class="current">לוח בקרה</span>
+        </div>
+      </div>
+      <div class="header-left">
+        <div class="search-wrapper">
+          <i data-lucide="search"></i>
+          <input type="text" class="search-input" placeholder="חיפוש מודולים, פוליסות...">
+        </div>
+        <button class="notif-btn">
+          <i data-lucide="bell" class="w-4 h-4"></i>
+          <span class="notif-dot"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content Area -->
+    <div class="content-area">
+
+      <!-- ==================== DASHBOARD ==================== -->
+      <div id="view-dashboard" class="view active fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">מפעל הפוליסות הגלובלי</h1>
+            <p class="section-subtitle">סקירה תפעולית כלל-מערכתית</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:12px;color:var(--pc-slate);">עודכן לאחרונה: לפני 2 דקות</span>
+            <button class="btn btn-primary" onclick="showView('product-shelf')">
+              <i data-lucide="plus"></i> מוצר חדש +
+            </button>
+          </div>
+        </div>
+
+        <div class="stats-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;">
+          <div class="stat-card card cursor-pointer" onclick="showView('product-shelf')">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div class="module-icon" style="background:#FEF2F2;"><i data-lucide="file-text" class="w-4 h-4" style="color:var(--pc-red);"></i></div>
+              <span class="badge-green badge">+12%</span>
+            </div>
+            <div class="font-en" style="font-size:24px;font-weight:700;" data-counter="847">0</div>
+            <div style="font-size:12px;color:var(--pc-slate);margin-top:4px;">מוצרים פעילים</div>
+          </div>
+          <div class="stat-card card cursor-pointer" onclick="showView('border-control')">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div class="module-icon" style="background:#EFF6FF;"><i data-lucide="globe" class="w-4 h-4" style="color:#2563EB;"></i></div>
+              <span class="badge-green badge">+3</span>
+            </div>
+            <div class="font-en" style="font-size:24px;font-weight:700;" data-counter="47">0</div>
+            <div style="font-size:12px;color:var(--pc-slate);margin-top:4px;">שווקים פעילים</div>
+          </div>
+          <div class="stat-card card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div class="module-icon" style="background:#F0FDF4;"><i data-lucide="check-circle" class="w-4 h-4" style="color:#16A34A;"></i></div>
+            </div>
+            <div class="font-en" style="font-size:24px;font-weight:700;" data-counter="97.3" data-suffix="%">0</div>
+            <div style="font-size:12px;color:var(--pc-slate);margin-top:4px;">ציון שלמות ממוצע</div>
+          </div>
+          <div class="stat-card card cursor-pointer" onclick="showView('guardrails')">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div class="module-icon" style="background:#FFFBEB;"><i data-lucide="alert-triangle" class="w-4 h-4" style="color:#D97706;"></i></div>
+            </div>
+            <div class="font-en" style="font-size:24px;font-weight:700;" data-counter="3">0</div>
+            <div style="font-size:12px;color:var(--pc-slate);margin-top:4px;">מוצרים מתחת לסף</div>
+          </div>
+        </div>
+
+        <!-- Module Status Grid -->
+        <div class="panel" style="padding:20px;margin-bottom:24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <h2 style="font-size:14px;font-weight:700;">סטטוס מודולים</h2>
+            <div style="display:flex;gap:12px;font-size:10px;font-weight:500;">
+              <span style="display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:50%;background:#22c55e;"></span> תפעולי</span>
+              <span style="display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:50%;background:#f59e0b;"></span> בפיתוח</span>
+              <span style="display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:50%;background:#d1d5db;"></span> מתוכנן</span>
+            </div>
+          </div>
+          <div class="module-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:12px;">
+            <div class="card cursor-pointer" style="text-align:center;padding:12px;border-radius:8px;background:#F0FDF4;border:1px solid #BBF7D0;" onclick="showView('product-shelf')">
+              <i data-lucide="library" class="w-5 h-5" style="color:#16A34A;margin:0 auto 6px;"></i>
+              <div style="font-size:10px;font-weight:600;">מדף מוצרים</div>
+              <span class="priority-badge priority-1" style="margin-top:4px;">P1</span>
+            </div>
+            <div class="card cursor-pointer" style="text-align:center;padding:12px;border-radius:8px;background:#F0FDF4;border:1px solid #BBF7D0;" onclick="showView('rule-engine')">
+              <i data-lucide="workflow" class="w-5 h-5" style="color:#16A34A;margin:0 auto 6px;"></i>
+              <div style="font-size:10px;font-weight:600;">מנוע חוקים</div>
+              <span class="priority-badge priority-1" style="margin-top:4px;">P1</span>
+            </div>
+            <div class="card cursor-pointer" style="text-align:center;padding:12px;border-radius:8px;background:#F0FDF4;border:1px solid #BBF7D0;" onclick="showView('versioning')">
+              <i data-lucide="git-branch" class="w-5 h-5" style="color:#16A34A;margin:0 auto 6px;"></i>
+              <div style="font-size:10px;font-weight:600;">ניהול גרסאות</div>
+              <span class="priority-badge priority-1" style="margin-top:4px;">P1</span>
+            </div>
+            <div class="card cursor-pointer" style="text-align:center;padding:12px;border-radius:8px;background:#F0FDF4;border:1px solid #BBF7D0;" onclick="showView('price-calc')">
+              <i data-lucide="calculator" class="w-5 h-5" style="color:#16A34A;margin:0 auto 6px;"></i>
+              <div style="font-size:10px;font-weight:600;">מחשבון תמחור</div>
+              <span class="priority-badge priority-1" style="margin-top:4px;">P1</span>
+            </div>
+            <div class="card cursor-pointer" style="text-align:center;padding:12px;border-radius:8px;background:#F0FDF4;border:1px solid #BBF7D0;" onclick="showView('currency')">
+              <i data-lucide="banknote" class="w-5 h-5" style="color:#16A34A;margin:0 auto 6px;"></i>
+              <div style="font-size:10px;font-weight:600;">ניהול מטבעות</div>
+              <span class="priority-badge priority-1" style="margin-top:4px;">P1</span>
+            </div>
+            <div class="card cursor-pointer" style="text-align:center;padding:12px;border-radius:8px;background:#FFFBEB;border:1px solid #FDE68A;" onclick="showView('gatekeeper')">
+              <i data-lucide="shield-check" class="w-5 h-5" style="color:#D97706;margin:0 auto 6px;"></i>
+              <div style="font-size:10px;font-weight:600;">שומר סף</div>
+              <span class="priority-badge priority-12" style="margin-top:4px;">P1-2</span>
+            </div>
+            <div class="card cursor-pointer" style="text-align:center;padding:12px;border-radius:8px;background:#FFFBEB;border:1px solid #FDE68A;" onclick="showView('reinsurance')">
+              <i data-lucide="repeat" class="w-5 h-5" style="color:#D97706;margin:0 auto 6px;"></i>
+              <div style="font-size:10px;font-weight:600;">ביטוח משנה</div>
+              <span class="priority-badge priority-12" style="margin-top:4px;">P1-2</span>
+            </div>
+            <div class="card cursor-pointer" style="text-align:center;padding:12px;border-radius:8px;background:#EFF6FF;border:1px solid #BFDBFE;" onclick="showView('guardrails')">
+              <i data-lucide="shield-alert" class="w-5 h-5" style="color:#2563EB;margin:0 auto 6px;"></i>
+              <div style="font-size:10px;font-weight:600;">מעקות בטיחות</div>
+              <span class="priority-badge priority-2" style="margin-top:4px;">P2</span>
+            </div>
+            <div class="card cursor-pointer" style="text-align:center;padding:12px;border-radius:8px;background:#EFF6FF;border:1px solid #BFDBFE;" onclick="showView('audit')">
+              <i data-lucide="file-search" class="w-5 h-5" style="color:#2563EB;margin:0 auto 6px;"></i>
+              <div style="font-size:10px;font-weight:600;">ביקורת ובקרה</div>
+              <span class="priority-badge priority-2" style="margin-top:4px;">P2</span>
+            </div>
+            <div class="card cursor-pointer" style="text-align:center;padding:12px;border-radius:8px;background:#F8FAFC;border:1px solid #E2E8F0;" onclick="showView('wizard')">
+              <i data-lucide="wand-2" class="w-5 h-5" style="color:#94A3B8;margin:0 auto 6px;"></i>
+              <div style="font-size:10px;font-weight:600;color:#64748B;">אשף הגדרה</div>
+              <span class="priority-badge priority-3" style="margin-top:4px;">P3</span>
+            </div>
+            <div class="card cursor-pointer" style="text-align:center;padding:12px;border-radius:8px;background:#F8FAFC;border:1px solid #E2E8F0;" onclick="showView('border-control')">
+              <i data-lucide="globe" class="w-5 h-5" style="color:#94A3B8;margin:0 auto 6px;"></i>
+              <div style="font-size:10px;font-weight:600;color:#64748B;">בקרת גבולות</div>
+              <span class="priority-badge priority-3" style="margin-top:4px;">P3</span>
+            </div>
+            <div class="card cursor-pointer" style="text-align:center;padding:12px;border-radius:8px;background:#F8FAFC;border:1px solid #E2E8F0;" onclick="showView('life-events')">
+              <i data-lucide="heart-pulse" class="w-5 h-5" style="color:#94A3B8;margin:0 auto 6px;"></i>
+              <div style="font-size:10px;font-weight:600;color:#64748B;">מגיב אירועי חיים</div>
+              <span class="priority-badge priority-3" style="margin-top:4px;">P3</span>
+            </div>
+            <div class="card cursor-pointer" style="text-align:center;padding:12px;border-radius:8px;background:#F8FAFC;border:1px solid #E2E8F0;" onclick="showView('corporate')">
+              <i data-lucide="building-2" class="w-5 h-5" style="color:#94A3B8;margin:0 auto 6px;"></i>
+              <div style="font-size:10px;font-weight:600;color:#64748B;">מבנה ארגוני</div>
+              <span class="priority-badge priority-3" style="margin-top:4px;">P3</span>
+            </div>
+            <div class="card cursor-pointer" style="text-align:center;padding:12px;border-radius:8px;background:#F8FAFC;border:1px solid #E2E8F0;" onclick="showView('finance')">
+              <i data-lucide="coins" class="w-5 h-5" style="color:#94A3B8;margin:0 auto 6px;"></i>
+              <div style="font-size:10px;font-weight:600;color:#64748B;">פיננסים מתקדם</div>
+              <span class="priority-badge priority-3" style="margin-top:4px;">P3</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Two Column: Activity + Threshold -->
+        <div class="two-col" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div class="panel" style="padding:20px;">
+            <h2 style="font-size:14px;font-weight:700;margin-bottom:16px;">פעילות אחרונה</h2>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div style="display:flex;align-items:flex-start;gap:12px;"><div style="width:8px;height:8px;border-radius:50%;background:#22c55e;margin-top:6px;flex-shrink:0;"></div><div><div style="font-size:12px;font-weight:500;">Travel Basic DE — גרסה 4.2 פורסמה</div><div style="font-size:10px;color:var(--pc-slate);">שרה מ. — לפני 12 דקות</div></div></div>
+              <div style="display:flex;align-items:flex-start;gap:12px;"><div style="width:8px;height:8px;border-radius:50%;background:#3b82f6;margin-top:6px;flex-shrink:0;"></div><div><div style="font-size:12px;font-weight:500;">Health Premium AU — טבלת תעריפים עודכנה</div><div style="font-size:10px;color:var(--pc-slate);">דוד ל. — לפני 34 דקות</div></div></div>
+              <div style="display:flex;align-items:flex-start;gap:12px;"><div style="width:8px;height:8px;border-radius:50%;background:#f59e0b;margin-top:6px;flex-shrink:0;"></div><div><div style="font-size:12px;font-weight:500;">Group Life IL — התראת מעקה: ציון 93%</div><div style="font-size:10px;color:var(--pc-slate);">מערכת — לפני שעה</div></div></div>
+              <div style="display:flex;align-items:flex-start;gap:12px;"><div style="width:8px;height:8px;border-radius:50%;background:#8b5cf6;margin-top:6px;flex-shrink:0;"></div><div><div style="font-size:12px;font-weight:500;">Digital Nomad Global — תבנית חדשה נוצרה</div><div style="font-size:10px;color:var(--pc-slate);">אלון כ. — לפני שעתיים</div></div></div>
+              <div style="display:flex;align-items:flex-start;gap:12px;"><div style="width:8px;height:8px;border-radius:50%;background:var(--pc-red);margin-top:6px;flex-shrink:0;"></div><div><div style="font-size:12px;font-weight:500;">חוזה ביטוח משנה QS-2026 — קיבולת ב-87%</div><div style="font-size:10px;color:var(--pc-slate);">מערכת — לפני 3 שעות</div></div></div>
+            </div>
+          </div>
+          <div class="panel" style="padding:20px;">
+            <h2 style="font-size:14px;font-weight:700;margin-bottom:16px;">מוצרים מתחת לסף</h2>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:#FEF2F2;border-radius:8px;">
+                <div><div style="font-size:12px;font-weight:600;">Group Life IL v2.1</div><div style="font-size:10px;color:var(--pc-slate);">חסר: קישור ביטוח משנה</div></div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div class="font-en" style="font-size:14px;font-weight:700;color:var(--pc-red);">93%</div>
+                  <button class="btn btn-danger-outline btn-sm" onclick="showView('guardrails')">תקן</button>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:#FEF2F2;border-radius:8px;">
+                <div><div style="font-size:12px;font-weight:600;">Travel Student UK v1.0</div><div style="font-size:10px;color:var(--pc-slate);">חסר: טבלת תעריפים, תגי תאימות</div></div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div class="font-en" style="font-size:14px;font-weight:700;color:var(--pc-red);">78%</div>
+                  <button class="btn btn-danger-outline btn-sm" onclick="showView('guardrails')">תקן</button>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:#FFFBEB;border-radius:8px;">
+                <div><div style="font-size:12px;font-weight:600;">Health Expat CY v3.0</div><div style="font-size:10px;color:var(--pc-slate);">חסר: חוקי תקופת חסד</div></div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div class="font-en" style="font-size:14px;font-weight:700;color:#D97706;">94%</div>
+                  <button class="btn btn-sm" style="background:white;color:#D97706;border:1px solid #FDE68A;" onclick="showView('guardrails')">תקן</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== PRODUCT SHELF ==================== -->
+      <div id="view-product-shelf" class="view fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">מדף מוצרים</h1>
+            <p class="section-subtitle">ספריית תבניות לכל מוצרי הביטוח</p>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-outline"><i data-lucide="filter"></i> סינון</button>
+            <button class="btn btn-primary"><i data-lucide="plus"></i> תבנית חדשה +</button>
+          </div>
+        </div>
+        <div class="tab-bar" id="product-tabs">
+          <button class="tab-btn active" data-category="all">כל המוצרים</button>
+          <button class="tab-btn" data-category="travel">נסיעות</button>
+          <button class="tab-btn" data-category="health">בריאות</button>
+          <button class="tab-btn" data-category="life">חיים</button>
+          <button class="tab-btn" data-category="custom">מותאם אישית</button>
+        </div>
+        <div id="product-grid" class="product-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;"></div>
+      </div>
+
+      <!-- ==================== RULE ENGINE ==================== -->
+      <div id="view-rule-engine" class="view fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">מנוע חוקים</h1>
+            <p class="section-subtitle">ניהול מחזור חיי פוליסה וחוקים עסקיים</p>
+          </div>
+          <button class="btn btn-primary" onclick="openNewRuleModal()"><i data-lucide="plus"></i> חוק חדש +</button>
+        </div>
+        <div class="panel" style="overflow:hidden;">
+          <table class="data-table desktop-table" id="rules-table">
+            <thead><tr>
+              <th>שם החוק</th>
+              <th>טריגר</th>
+              <th>פעולה</th>
+              <th>מוצרים</th>
+              <th class="center">סטטוס</th>
+              <th class="center">הופעל (24 שעות)</th>
+              <th class="center">פעולות</th>
+            </tr></thead>
+            <tbody id="rules-tbody"></tbody>
+          </table>
+          <div class="mobile-cards" id="rules-mobile"></div>
+        </div>
+      </div>
+
+      <!-- ==================== VERSIONING ==================== -->
+      <div id="view-versioning" class="view fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">ניהול גרסאות</h1>
+            <p class="section-subtitle">מעקב מלא ובקרת גרסאות לכל שינויי הפוליסות</p>
+          </div>
+          <button class="btn btn-outline" onclick="openVersionCompare()"><i data-lucide="git-compare"></i> השוואת גרסאות</button>
+        </div>
+        <div class="panel" style="padding:20px;">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <select class="form-select" style="width:auto;" id="version-product-select" onchange="renderVersionTimeline()">
+              <option value="Travel Basic">Travel Basic</option>
+              <option value="Health Premium">Health Premium</option>
+              <option value="Group Life">Group Life</option>
+              <option value="Digital Nomad Global">Digital Nomad Global</option>
+            </select>
+            <span style="font-size:12px;color:var(--pc-slate);">מציג 5 גרסאות אחרונות</span>
+          </div>
+          <div id="version-timeline" style="display:flex;flex-direction:column;gap:12px;"></div>
+        </div>
+      </div>
+
+      <!-- ==================== PRICE CALCULATOR ==================== -->
+      <div id="view-price-calc" class="view fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">מחשבון תמחור</h1>
+            <p class="section-subtitle">טבלאות תעריפים מרכזיות ומנוע חישוב פרמיות</p>
+          </div>
+          <button class="btn btn-primary"><i data-lucide="plus"></i> טבלת תעריפים חדשה +</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 2fr;gap:16px;margin-bottom:24px;">
+          <div class="panel" style="padding:20px;">
+            <h3 style="font-size:11px;font-weight:600;color:var(--pc-slate);text-transform:uppercase;margin-bottom:12px;">סימולטור פרמיות</h3>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div><label class="form-label">מוצר</label><select class="form-select" id="calc-product" onchange="calculatePremium()"><option>Travel Basic</option><option>Health Premium</option><option>Digital Nomad Global</option><option>Group Life</option></select></div>
+              <div><label class="form-label">גיל</label><input type="number" class="form-input font-en" id="calc-age" value="35" oninput="calculatePremium()"></div>
+              <div><label class="form-label">טריטוריה</label><select class="form-select" id="calc-territory" onchange="calculatePremium()"><option>גרמניה</option><option>אוסטרליה</option><option>ישראל</option><option>בריטניה</option><option>יפן</option><option>תאילנד</option></select></div>
+              <div><label class="form-label">רמת כיסוי</label><select class="form-select" id="calc-coverage" onchange="calculatePremium()"><option>סטנדרטי</option><option>פרימיום</option><option>פלטינום</option></select></div>
+              <div><label class="form-label">משך</label><select class="form-select" id="calc-duration" onchange="calculatePremium()"><option value="1">1 חודש</option><option value="3">3 חודשים</option><option value="6">6 חודשים</option><option value="12">שנה</option></select></div>
+              <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="calculatePremium()">חשב פרמיה</button>
+            </div>
+          </div>
+          <div>
+            <div id="calc-result" class="panel" style="display:none;margin-bottom:16px;">
+              <div style="padding:20px;">
+                <h3 style="font-size:11px;font-weight:600;color:var(--pc-slate);text-transform:uppercase;margin-bottom:12px;">תוצאת החישוב</h3>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;">
+                  <div style="text-align:center;padding:12px;background:var(--pc-light-red);border-radius:8px;"><div class="font-en" style="font-size:24px;font-weight:700;color:var(--pc-red);" id="result-usd">$0.00</div><div style="font-size:10px;color:var(--pc-slate);margin-top:4px;">פרמיה חודשית (USD)</div></div>
+                  <div style="text-align:center;padding:12px;background:#F0FDF4;border-radius:8px;"><div class="font-en" style="font-size:24px;font-weight:700;color:#16A34A;" id="result-eur">€0.00</div><div style="font-size:10px;color:var(--pc-slate);margin-top:4px;">פרמיה חודשית (EUR)</div></div>
+                  <div style="text-align:center;padding:12px;background:#EFF6FF;border-radius:8px;"><div class="font-en" style="font-size:24px;font-weight:700;color:#2563EB;" id="result-factor">0.000</div><div style="font-size:10px;color:var(--pc-slate);margin-top:4px;">מקדם טריטוריה</div></div>
+                </div>
+                <div id="calc-breakdown" style="font-size:12px;color:var(--pc-slate);"></div>
+              </div>
+            </div>
+            <div class="panel" style="padding:20px;">
+              <h3 style="font-size:11px;font-weight:600;color:var(--pc-slate);text-transform:uppercase;margin-bottom:12px;">טבלאות תעריפים פעילות</h3>
+              <table class="data-table">
+                <thead><tr><th>שם הטבלה</th><th>מוצר</th><th>תוקף מ-</th><th class="center">גרסה</th></tr></thead>
+                <tbody>
+                  <tr><td style="font-weight:500;">Travel Base Rates 2026</td><td style="color:var(--pc-slate);">Travel Basic</td><td style="color:var(--pc-slate);" class="font-en">01/01/2026</td><td class="center"><span class="tag font-en">v3.0</span></td></tr>
+                  <tr><td style="font-weight:500;">Health Age Bands</td><td style="color:var(--pc-slate);">Health Premium</td><td style="color:var(--pc-slate);" class="font-en">01/01/2026</td><td class="center"><span class="tag font-en">v5.1</span></td></tr>
+                  <tr><td style="font-weight:500;">Territory Risk Factors</td><td style="color:var(--pc-slate);">כל המוצרים</td><td style="color:var(--pc-slate);" class="font-en">01/02/2026</td><td class="center"><span class="tag font-en">v2.4</span></td></tr>
+                  <tr><td style="font-weight:500;">Group Life Tables</td><td style="color:var(--pc-slate);">Group Life</td><td style="color:var(--pc-slate);" class="font-en">01/01/2026</td><td class="center"><span class="tag font-en">v1.2</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== CURRENCY ==================== -->
+      <div id="view-currency" class="view fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">ניהול מטבעות</h1>
+            <p class="section-subtitle">תמיכה רב-מטבעית וניהול שערי חליפין</p>
+          </div>
+        </div>
+        <div id="currency-rates" class="stats-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;"></div>
+        <div class="panel" style="padding:20px;">
+          <h3 style="font-size:14px;font-weight:700;margin-bottom:16px;">תצורת מטבעות מוצרים</h3>
+          <table class="data-table desktop-table" id="currency-table">
+            <thead><tr><th>מוצר</th><th>מטבע פרמיה</th><th>מטבע כיסוי</th><th>נעילת שער</th></tr></thead>
+            <tbody id="currency-tbody"></tbody>
+          </table>
+          <div class="mobile-cards" id="currency-mobile"></div>
+        </div>
+      </div>
+
+      <!-- ==================== GATEKEEPER ==================== -->
+      <div id="view-gatekeeper" class="view fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">שומר סף והעברות</h1>
+            <p class="section-subtitle">זכאות לקוחות, פילוח והעברת מוצרים</p>
+          </div>
+          <button class="btn btn-primary"><i data-lucide="arrow-right-left"></i> העברה חדשה</button>
+        </div>
+        <div class="stats-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
+          <div class="stat-card"><div style="font-size:12px;color:var(--pc-slate);margin-bottom:4px;">העברות פעילות</div><div class="font-en" style="font-size:24px;font-weight:700;">2</div></div>
+          <div class="stat-card"><div style="font-size:12px;color:var(--pc-slate);margin-bottom:4px;">לקוחות במעבר</div><div class="font-en" style="font-size:24px;font-weight:700;">4,218</div></div>
+          <div class="stat-card"><div style="font-size:12px;color:var(--pc-slate);margin-bottom:4px;">מוצרים שהוצאו משימוש</div><div class="font-en" style="font-size:24px;font-weight:700;">3</div></div>
+        </div>
+        <div class="panel" style="padding:20px;margin-bottom:24px;">
+          <h3 style="font-size:14px;font-weight:700;margin-bottom:16px;">העברות פעילות</h3>
+          <div id="migrations-container" style="display:flex;flex-direction:column;gap:16px;"></div>
+        </div>
+        <div class="panel" style="padding:20px;">
+          <h3 style="font-size:14px;font-weight:700;margin-bottom:16px;">כללי זכאות</h3>
+          <table class="data-table">
+            <thead><tr><th>כלל</th><th>תנאי</th><th>מוצרים מושפעים</th><th class="center">סטטוס</th></tr></thead>
+            <tbody>
+              <tr><td style="font-weight:500;">גיל מינימלי</td><td style="color:var(--pc-slate);">גיל ≥ 18</td><td>כל המוצרים</td><td class="center"><span class="badge badge-active">פעיל</span></td></tr>
+              <tr><td style="font-weight:500;">תושבות</td><td style="color:var(--pc-slate);">תושב ישראל</td><td>Travel Basic IL</td><td class="center"><span class="badge badge-active">פעיל</span></td></tr>
+              <tr><td style="font-weight:500;">תקופת המתנה</td><td style="color:var(--pc-slate);">≥ 90 ימים מהצטרפות</td><td>Health Premium</td><td class="center"><span class="badge badge-active">פעיל</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ==================== REINSURANCE ==================== -->
+      <div id="view-reinsurance" class="view fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">ביטוח משנה</h1>
+            <p class="section-subtitle">ניהול חוזים, פרמיות שהומחו ושיפויי תביעות</p>
+          </div>
+          <button class="btn btn-primary"><i data-lucide="plus"></i> חוזה חדש +</button>
+        </div>
+        <div class="stats-grid-4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;">
+          <div class="stat-card"><div style="font-size:12px;color:var(--pc-slate);margin-bottom:4px;">חוזים פעילים</div><div class="font-en" style="font-size:24px;font-weight:700;">5</div></div>
+          <div class="stat-card"><div style="font-size:12px;color:var(--pc-slate);margin-bottom:4px;">פרמיות שהומחו (YTD)</div><div class="font-en" style="font-size:24px;font-weight:700;">$12.4M</div><div style="font-size:10px;color:#16A34A;">+8% מ-2025</div></div>
+          <div class="stat-card"><div style="font-size:12px;color:var(--pc-slate);margin-bottom:4px;">שיפויי תביעות (YTD)</div><div class="font-en" style="font-size:24px;font-weight:700;">$3.2M</div></div>
+          <div class="stat-card"><div style="font-size:12px;color:var(--pc-slate);margin-bottom:4px;">ניצול קיבולת ממוצע</div><div class="font-en" style="font-size:24px;font-weight:700;">74%</div></div>
+        </div>
+        <div class="panel" style="overflow:hidden;">
+          <table class="data-table desktop-table" id="reinsurance-table">
+            <thead><tr><th>חוזה</th><th>סוג</th><th>שותף</th><th>קיבולת</th><th>ניצול</th><th>תוקף</th><th class="center">סטטוס</th></tr></thead>
+            <tbody id="reinsurance-tbody"></tbody>
+          </table>
+          <div class="mobile-cards" id="reinsurance-mobile"></div>
+        </div>
+      </div>
+
+      <!-- ==================== GUARDRAILS ==================== -->
+      <div id="view-guardrails" class="view fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">מעקות בטיחות</h1>
+            <p class="section-subtitle">אכיפת שלמות מוצר ואימות טרום-השקה</p>
+          </div>
+        </div>
+        <div style="margin-bottom:16px;">
+          <select class="form-select" style="width:auto;" id="guardrail-product" onchange="updateGuardrails()">
+            <option value="Digital Nomad Global">Digital Nomad Global v1.0</option>
+            <option value="Travel Basic">Travel Basic v4.2</option>
+            <option value="Health Premium">Health Premium v3.1</option>
+            <option value="Group Life">Group Life IL v2.0</option>
+          </select>
+        </div>
+        <div class="panel" style="padding:20px;margin-bottom:24px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <h3 style="font-size:14px;font-weight:700;">ציון שלמות</h3>
+            <span id="guardrail-status-badge" class="badge badge-amber">מתחת לסף (95%)</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:32px;flex-wrap:wrap;">
+            <div style="position:relative;width:128px;height:128px;flex-shrink:0;">
+              <svg width="128" height="128" viewBox="0 0 120 120" style="transform:rotate(-90deg);">
+                <circle cx="60" cy="60" r="52" fill="none" stroke="#f1f5f9" stroke-width="10"/>
+                <circle id="score-ring" cx="60" cy="60" r="52" fill="none" stroke="var(--pc-red)" stroke-width="10" stroke-dasharray="326.7" stroke-dashoffset="326.7" stroke-linecap="round" class="score-ring-circle"/>
+              </svg>
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;"><span id="score-text" class="font-en" style="font-size:24px;font-weight:700;">0%</span></div>
+            </div>
+            <div id="guardrail-categories" style="flex:1;display:grid;grid-template-columns:1fr 1fr;gap:12px;"></div>
+          </div>
+        </div>
+        <div class="panel" style="padding:20px;">
+          <h3 style="font-size:14px;font-weight:700;margin-bottom:12px;">פעולות נדרשות</h3>
+          <div id="guardrail-actions" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+      </div>
+
+      <!-- ==================== AUDIT ==================== -->
+      <div id="view-audit" class="view fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">ביקורת ובקרה</h1>
+            <p class="section-subtitle">לוגים בלתי ניתנים לשינוי ומעקב תאימות</p>
+          </div>
+          <button class="btn btn-outline" onclick="showToast('הדוח מוכן להורדה','success')"><i data-lucide="download"></i> ייצוא דוח</button>
+        </div>
+        <div class="panel" style="overflow:hidden;">
+          <div style="padding:12px 20px;border-bottom:1px solid var(--pc-border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+            <input type="text" class="form-input" id="audit-search" placeholder="חיפוש בלוגים..." style="flex:1;min-width:150px;" oninput="filterAuditLog()">
+            <select class="form-select" id="audit-action-filter" style="width:auto;" onchange="filterAuditLog()">
+              <option value="">כל הפעולות</option>
+              <option value="יצירה">יצירה</option>
+              <option value="עדכון">עדכון</option>
+              <option value="מחיקה">מחיקה</option>
+              <option value="פרסום">פרסום</option>
+              <option value="שחזור">שחזור</option>
+              <option value="התראה">התראה</option>
+            </select>
+            <select class="form-select" id="audit-user-filter" style="width:auto;" onchange="filterAuditLog()">
+              <option value="">כל המשתמשים</option>
+              <option value="אלון כ.">אלון כ.</option>
+              <option value="שרה מ.">שרה מ.</option>
+              <option value="דוד ל.">דוד ל.</option>
+              <option value="מערכת">מערכת</option>
+            </select>
+          </div>
+          <table class="data-table desktop-table" id="audit-table">
+            <thead><tr><th>חותמת זמן</th><th>משתמש</th><th>פעולה</th><th>ישות</th><th>תגים</th></tr></thead>
+            <tbody id="audit-tbody"></tbody>
+          </table>
+          <div class="mobile-cards" id="audit-mobile"></div>
+        </div>
+      </div>
+
+      <!-- ==================== SETUP WIZARD ==================== -->
+      <div id="view-wizard" class="view fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">אשף הגדרה ללא הדרכה</h1>
+            <p class="section-subtitle">יצירת פוליסות מודרכת לכל מפעיל</p>
+          </div>
+        </div>
+        <div style="max-width:700px;margin:0 auto;">
+          <div class="panel" style="padding:24px;">
+            <!-- Stepper -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+              <div class="stepper" id="wizard-stepper">
+                <div class="stepper-circle current" data-step="1">1</div>
+                <div class="stepper-line" data-step="1"></div>
+                <div class="stepper-circle upcoming" data-step="2">2</div>
+                <div class="stepper-line" data-step="2"></div>
+                <div class="stepper-circle upcoming" data-step="3">3</div>
+                <div class="stepper-line" data-step="3"></div>
+                <div class="stepper-circle upcoming" data-step="4">4</div>
+              </div>
+              <span id="wizard-step-label" style="font-size:12px;color:var(--pc-slate);">שלב 1 מתוך 4</span>
+            </div>
+
+            <div id="wizard-steps-container">
+              <!-- Step 1 -->
+              <div class="wizard-step active" data-wizard-step="1">
+                <h2 style="font-size:18px;font-weight:700;margin-bottom:8px;">איזה סוג פוליסה אתה יוצר?</h2>
+                <p style="font-size:13px;color:var(--pc-slate);margin-bottom:20px;">בחר את סוג הפוליסה כדי לטעון את תהליך ההגדרה המתאים.</p>
+                <div id="wizard-type-options" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;">
+                  <button class="card" style="padding:16px;border:2px solid var(--pc-red);border-radius:12px;text-align:center;background:var(--pc-light-red);cursor:pointer;" data-type="individual" onclick="selectWizardType(this)">
+                    <i data-lucide="user" style="width:24px;height:24px;color:var(--pc-red);margin:0 auto 8px;"></i>
+                    <div style="font-size:14px;font-weight:600;">יחיד</div>
+                    <div style="font-size:10px;color:var(--pc-slate);margin-top:4px;">בעל פוליסה בודד</div>
+                  </button>
+                  <button class="card" style="padding:16px;border:2px solid #e2e8f0;border-radius:12px;text-align:center;cursor:pointer;" data-type="group" onclick="selectWizardType(this)">
+                    <i data-lucide="users" style="width:24px;height:24px;color:var(--pc-slate);margin:0 auto 8px;"></i>
+                    <div style="font-size:14px;font-weight:600;">קבוצתי</div>
+                    <div style="font-size:10px;color:var(--pc-slate);margin-top:4px;">ארגוני / עסקי</div>
+                  </button>
+                  <button class="card" style="padding:16px;border:2px solid #e2e8f0;border-radius:12px;text-align:center;cursor:pointer;" data-type="aso" onclick="selectWizardType(this)">
+                    <i data-lucide="settings-2" style="width:24px;height:24px;color:var(--pc-slate);margin:0 auto 8px;"></i>
+                    <div style="font-size:14px;font-weight:600;">ASO</div>
+                    <div style="font-size:10px;color:var(--pc-slate);margin-top:4px;">ניהול בלבד</div>
+                  </button>
+                </div>
+                <div style="display:flex;justify-content:flex-start;"><button class="btn btn-primary" onclick="wizardNext()">שלב הבא</button></div>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="wizard-step" data-wizard-step="2">
+                <h2 style="font-size:18px;font-weight:700;margin-bottom:8px;">הגדר את פרטי המוצר הבסיסיים</h2>
+                <p style="font-size:13px;color:var(--pc-slate);margin-bottom:20px;"></p>
+                <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
+                  <div><label class="form-label">שם המוצר</label><input type="text" class="form-input" id="wizard-name" placeholder="לדוגמה: Travel Premium EU"></div>
+                  <div><label class="form-label">תבנית בסיס</label><select class="form-select" id="wizard-template"><option>Travel Basic</option><option>Health Premium</option><option>Group Life</option><option>ריק</option></select></div>
+                  <div><label class="form-label">תיאור קצר</label><textarea class="form-textarea" id="wizard-desc" rows="3" placeholder="תיאור המוצר..."></textarea></div>
+                  <div><label class="form-label">בעלים</label><select class="form-select" id="wizard-owner"><option>אלון כ.</option><option>שרה מ.</option><option>דוד ל.</option></select></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                  <button class="btn btn-outline" onclick="wizardBack()">חזור</button>
+                  <button class="btn btn-primary" onclick="wizardNext()">שלב הבא</button>
+                </div>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="wizard-step" data-wizard-step="3">
+                <h2 style="font-size:18px;font-weight:700;margin-bottom:8px;">הגדר תמחור ראשוני ושווקי יעד</h2>
+                <p style="font-size:13px;color:var(--pc-slate);margin-bottom:20px;"></p>
+                <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div><label class="form-label">מטבע פרמיה</label><select class="form-select" id="wizard-premium-ccy"><option>USD</option><option>EUR</option><option>ILS</option><option>GBP</option><option>AUD</option></select></div>
+                    <div><label class="form-label">מטבע כיסוי</label><select class="form-select" id="wizard-coverage-ccy"><option>USD</option><option>EUR</option><option>ILS</option><option>GBP</option><option>AUD</option></select></div>
+                  </div>
+                  <div><label class="form-label">שווקים</label>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;" id="wizard-markets">
+                      <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="checkbox" checked value="ישראל"> ישראל</label>
+                      <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="checkbox" value="גרמניה"> גרמניה</label>
+                      <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="checkbox" value="אוסטרליה"> אוסטרליה</label>
+                      <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="checkbox" value="בריטניה"> בריטניה</label>
+                      <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="checkbox" value="יפן"> יפן</label>
+                      <label style="display:flex;align-items:center;gap:4px;font-size:13px;cursor:pointer;"><input type="checkbox" value="תאילנד"> תאילנד</label>
+                    </div>
+                  </div>
+                  <div><label class="form-label">תעריף בסיס חודשי</label><input type="number" class="form-input font-en" id="wizard-rate" placeholder="$0.00"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                  <button class="btn btn-outline" onclick="wizardBack()">חזור</button>
+                  <button class="btn btn-primary" onclick="wizardNext()">שלב הבא</button>
+                </div>
+              </div>
+
+              <!-- Step 4 -->
+              <div class="wizard-step" data-wizard-step="4">
+                <h2 style="font-size:18px;font-weight:700;margin-bottom:8px;">סקירת הגדרות</h2>
+                <div id="wizard-summary" class="panel" style="padding:16px;margin-bottom:16px;background:#f8fafc;"></div>
+                <div class="info-box info-box-warning" style="margin-bottom:24px;">
+                  <i data-lucide="alert-triangle" style="width:18px;height:18px;flex-shrink:0;"></i>
+                  <span>המוצר ייווצר בסטטוס טיוטה ויעבור אימות מעקות בטיחות לפני הפעלה.</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;">
+                  <button class="btn btn-outline" onclick="wizardBack()">חזור</button>
+                  <button class="btn btn-primary" onclick="wizardSubmit()">צור מוצר</button>
+                </div>
+              </div>
+
+              <!-- Success -->
+              <div class="wizard-step" data-wizard-step="5">
+                <div class="wizard-success" id="wizard-success"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== BORDER CONTROL ==================== -->
+      <div id="view-border-control" class="view fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">בקרת גבולות גלובלית</h1>
+            <p class="section-subtitle">מעקב טריטוריה ומעברי מוצר אוטומטיים</p>
+          </div>
+        </div>
+        <div class="stats-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
+          <div class="stat-card"><div style="font-size:12px;color:var(--pc-slate);margin-bottom:4px;">נוודים במעקב</div><div class="font-en" style="font-size:24px;font-weight:700;">8,420</div></div>
+          <div class="stat-card"><div style="font-size:12px;color:var(--pc-slate);margin-bottom:4px;">מעברי טריטוריה ממתינים</div><div class="font-en" style="font-size:24px;font-weight:700;color:#D97706;">47</div></div>
+          <div class="stat-card"><div style="font-size:12px;color:var(--pc-slate);margin-bottom:4px;">הפרות כלל 12 חודשים</div><div class="font-en" style="font-size:24px;font-weight:700;color:var(--pc-red);">12</div></div>
+        </div>
+        <div class="panel" style="padding:20px;margin-bottom:24px;">
+          <h3 style="font-size:14px;font-weight:700;margin-bottom:16px;">טריטוריות פעילות</h3>
+          <div id="territory-grid" class="territory-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;"></div>
+        </div>
+        <div class="panel" style="overflow:hidden;">
+          <div style="padding:16px 20px;border-bottom:1px solid var(--pc-border);"><h3 style="font-size:14px;font-weight:700;">שינויי טריטוריה אחרונים</h3></div>
+          <table class="data-table desktop-table" id="border-table">
+            <thead><tr><th>לקוח</th><th>מ-</th><th>אל</th><th>השפעה על פרמיה</th><th class="center">סטטוס</th></tr></thead>
+            <tbody id="border-tbody"></tbody>
+          </table>
+          <div class="mobile-cards" id="border-mobile"></div>
+        </div>
+      </div>
+
+      <!-- ==================== LIFE EVENTS ==================== -->
+      <div id="view-life-events" class="view fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">מגיב אירועי חיים</h1>
+            <p class="section-subtitle">התאמות פוליסה אוטומטיות לשינויי חיים — מעריסה עד זקנה</p>
+          </div>
+        </div>
+        <div id="event-type-cards" class="event-type-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;"></div>
+        <div class="panel" style="padding:20px;">
+          <h3 style="font-size:14px;font-weight:700;margin-bottom:16px;">אירועים אחרונים</h3>
+          <div id="life-events-list" style="display:flex;flex-direction:column;gap:12px;"></div>
+        </div>
+      </div>
+
+      <!-- ==================== CORPORATE ==================== -->
+      <div id="view-corporate" class="view fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">מבנה ארגוני</h1>
+            <p class="section-subtitle">פוליסות אם, תעודות חברים וניהול ארגוני</p>
+          </div>
+          <button class="btn btn-primary"><i data-lucide="plus"></i> קבוצה ארגונית חדשה +</button>
+        </div>
+        <div class="panel" style="overflow:hidden;">
+          <table class="data-table desktop-table" id="corporate-table">
+            <thead><tr><th>לקוח ארגוני</th><th>פוליסת אם</th><th class="center">חברים</th><th class="center">תת-קבוצות</th><th>פרמיה שנתית</th><th class="center">סטטוס</th></tr></thead>
+            <tbody id="corporate-tbody"></tbody>
+          </table>
+          <div class="mobile-cards" id="corporate-mobile"></div>
+        </div>
+        <div id="org-chart-container" style="margin-top:24px;display:none;"></div>
+      </div>
+
+      <!-- ==================== ADVANCED FINANCE ==================== -->
+      <div id="view-finance" class="view fade-in">
+        <div class="section-header">
+          <div>
+            <h1 class="section-title">פיננסים מתקדם גלובלי</h1>
+            <p class="section-subtitle">מודל שלוש מטבעות, נעילת שערים וניהול חשיפת מט״ח</p>
+          </div>
+        </div>
+        <div class="stats-grid-3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;">
+          <div class="stat-card"><div style="font-size:12px;color:var(--pc-slate);margin-bottom:4px;">חשיפת מט"ח נטו</div><div class="font-en" style="font-size:24px;font-weight:700;">$4.2M</div><div style="font-size:10px;color:#D97706;">סיכון בינוני</div></div>
+          <div class="stat-card"><div style="font-size:12px;color:var(--pc-slate);margin-bottom:4px;">שערים נעולים (פעילים)</div><div class="font-en" style="font-size:24px;font-weight:700;">23</div><div style="font-size:10px;color:#16A34A;">כולם בטווח</div></div>
+          <div class="stat-card"><div style="font-size:12px;color:var(--pc-slate);margin-bottom:4px;">השפעת מט"ח על רו"ה (חודש)</div><div class="font-en" style="font-size:24px;font-weight:700;color:#16A34A;">+$180K</div><div style="font-size:10px;color:var(--pc-slate);">תנועה חיובית</div></div>
+        </div>
+        <div class="panel" style="padding:20px;margin-bottom:24px;">
+          <h3 style="font-size:14px;font-weight:700;margin-bottom:16px;">תצורת שלוש מטבעות</h3>
+          <table class="data-table" id="finance-table">
+            <thead><tr><th>מוצר</th><th class="center">מטבע פרמיה</th><th class="center">מטבע כיסוי</th><th class="center">מטבע השתתפות עצמית</th><th>אסטרטגיית נעילה</th></tr></thead>
+            <tbody id="finance-tbody"></tbody>
+          </table>
+        </div>
+        <div class="panel" style="padding:20px;">
+          <h3 style="font-size:14px;font-weight:700;margin-bottom:16px;">חשיפת מט"ח לפי מטבע</h3>
+          <div id="fx-chart"></div>
+        </div>
+      </div>
+
+    </div><!-- end content area -->
+  </main>
+</div><!-- end app shell -->
+
+<!-- Modal Overlay -->
+<div id="modal-overlay" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-container" id="modal-container"></div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container" class="toast-container"></div>
+
+<!-- Bottom Nav (Mobile) -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button class="bottom-nav-item active" data-view="dashboard" onclick="showView('dashboard')">
+      <i data-lucide="layout-dashboard"></i>
+      <span>בקרה</span>
+    </button>
+    <button class="bottom-nav-item" data-view="product-shelf" onclick="showView('product-shelf')">
+      <i data-lucide="library"></i>
+      <span>מוצרים</span>
+    </button>
+    <button class="bottom-nav-item" data-view="guardrails" onclick="showView('guardrails')">
+      <i data-lucide="shield-alert"></i>
+      <span>מעקות</span>
+    </button>
+    <button class="bottom-nav-item" onclick="toggleSidebar()">
+      <i data-lucide="menu"></i>
+      <span>תפריט</span>
+    </button>
+  </div>
+</nav>
+
+<!-- Drawer Backdrop -->
+<div id="drawer-backdrop" class="drawer-backdrop" onclick="toggleSidebar()"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
